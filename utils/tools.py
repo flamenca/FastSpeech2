@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib
 from scipy.io import wavfile
 from matplotlib import pyplot as plt
-
+import hashlib
 
 matplotlib.use("Agg")
 
@@ -194,7 +194,7 @@ def synth_samples(targets, predictions, vocoder, model_config, preprocess_config
             stats,
             ["Synthetized Spectrogram"],
         )
-        plt.savefig(os.path.join(path, "{}.png".format(basename)))
+        plt.savefig(os.path.join(path, "{}.png".format(hashlib.md5(basename.encode()).hexdigest())))
         plt.close()
 
     from .model import vocoder_infer
@@ -207,7 +207,7 @@ def synth_samples(targets, predictions, vocoder, model_config, preprocess_config
 
     sampling_rate = preprocess_config["preprocessing"]["audio"]["sampling_rate"]
     for wav, basename in zip(wav_predictions, basenames):
-        wavfile.write(os.path.join(path, "{}.wav".format(basename)), sampling_rate, wav)
+        wavfile.write(os.path.join(path, "{}.wav".format(hashlib.md5(basename.encode()).hexdigest())), sampling_rate, wav)
 
 
 def plot_mel(data, stats, titles):

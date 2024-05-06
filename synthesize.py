@@ -136,7 +136,23 @@ class Speaker:
         self.train_LibriTTS["path"]["result_path"] = "NineEightFive/static/wav"
 
     def Chinese(self, text, speaker_id):
-        print("done")
+        restore_step = 600000
+        control_values = 1.0, 1.0, 1.0
+
+        configs = (self.preprocess_AISHELL3, self.model_AISHELL3, self.train_AISHELL3)
+        # Get model
+        model = get_model(restore_step, configs, device, train=False)
+
+        # Load vocoder
+        vocoder = get_vocoder(self.model_AISHELL3, device)
+
+        # Preprocess texts
+        ids = raw_texts = [text[:100]]
+        speakers = np.array([speaker_id])
+        texts = np.array([preprocess_mandarin(text, self.preprocess_AISHELL3)])
+        text_lens = np.array([len(texts[0])])
+        batchs = [(ids, raw_texts, speakers, texts, text_lens, max(text_lens))]
+        synthesize(model, restore_step, configs, vocoder, batchs, control_values)
 
     def English(self, text, speaker_id):
         restore_step = 800000
