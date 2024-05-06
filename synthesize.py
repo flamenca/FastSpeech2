@@ -109,31 +109,31 @@ def synthesize(model, step, configs, vocoder, batchs, control_values):
 
 class Speaker:
     def __init__(self, root_dir):
-        self.preprocess_AISHELL3 = yaml.load(open(root_dir + "/config/AISHELL3/preprocess.yaml", "r"), Loader=yaml.FullLoader)
-        self.preprocess_AISHELL3["path"]["lexicon_path"] = "FastSpeech2/" + self.preprocess_AISHELL3["path"]["lexicon_path"]
-        self.preprocess_AISHELL3["path"]["raw_path"] = "FastSpeech2/" + self.preprocess_AISHELL3["path"]["raw_path"]
-        self.preprocess_AISHELL3["path"]["preprocessed_path"] = "FastSpeech2/" + self.preprocess_AISHELL3["path"]["preprocessed_path"]
+        self.preprocess_AISHELL3 = yaml.load(open(root_dir + "config/AISHELL3/preprocess.yaml", "r"), Loader=yaml.FullLoader)
+        self.preprocess_AISHELL3["path"]["lexicon_path"] = root_dir + self.preprocess_AISHELL3["path"]["lexicon_path"]
+        self.preprocess_AISHELL3["path"]["raw_path"] = root_dir + self.preprocess_AISHELL3["path"]["raw_path"]
+        self.preprocess_AISHELL3["path"]["preprocessed_path"] = root_dir + self.preprocess_AISHELL3["path"]["preprocessed_path"]
 
-        self.model_AISHELL3 = yaml.load(open(root_dir + "/config/AISHELL3/model.yaml", "r"), Loader=yaml.FullLoader)
-        self.model_AISHELL3["path"]["hifigan_path"] = "FastSpeech2/" + self.model_AISHELL3["path"]["hifigan_path"]
+        self.model_AISHELL3 = yaml.load(open(root_dir + "config/AISHELL3/model.yaml", "r"), Loader=yaml.FullLoader)
+        self.model_AISHELL3["path"]["hifigan_path"] = root_dir + self.model_AISHELL3["path"]["hifigan_path"]
 
-        self.train_AISHELL3 = yaml.load(open(root_dir + "/config/AISHELL3/train.yaml", "r"), Loader=yaml.FullLoader)
-        self.train_AISHELL3["path"]["ckpt_path"] = "FastSpeech2/" + self.train_AISHELL3["path"]["ckpt_path"]
-        self.train_AISHELL3["path"]["log_path"] = "FastSpeech2/" + self.train_AISHELL3["path"]["log_path"]
-        self.train_AISHELL3["path"]["result_path"] = "NineEightFive/static/wav"
+        self.train_AISHELL3 = yaml.load(open(root_dir + "config/AISHELL3/train.yaml", "r"), Loader=yaml.FullLoader)
+        self.train_AISHELL3["path"]["ckpt_path"] = root_dir + self.train_AISHELL3["path"]["ckpt_path"]
+        self.train_AISHELL3["path"]["log_path"] = root_dir + self.train_AISHELL3["path"]["log_path"]
+        self.train_AISHELL3["path"]["result_path"] = root_dir + "../NineEightFive/static/wav"
 
-        self.preprocess_LibriTTS = yaml.load(open(root_dir + "/config/LibriTTS/preprocess.yaml", "r"), Loader=yaml.FullLoader)
-        self.preprocess_LibriTTS["path"]["lexicon_path"] = "FastSpeech2/" + self.preprocess_LibriTTS["path"]["lexicon_path"]
-        self.preprocess_LibriTTS["path"]["raw_path"] = "FastSpeech2/" + self.preprocess_LibriTTS["path"]["raw_path"]
-        self.preprocess_LibriTTS["path"]["preprocessed_path"] = "FastSpeech2/" + self.preprocess_LibriTTS["path"]["preprocessed_path"]
+        self.preprocess_LibriTTS = yaml.load(open(root_dir + "config/LibriTTS/preprocess.yaml", "r"), Loader=yaml.FullLoader)
+        self.preprocess_LibriTTS["path"]["lexicon_path"] = root_dir + self.preprocess_LibriTTS["path"]["lexicon_path"]
+        self.preprocess_LibriTTS["path"]["raw_path"] = root_dir + self.preprocess_LibriTTS["path"]["raw_path"]
+        self.preprocess_LibriTTS["path"]["preprocessed_path"] = root_dir + self.preprocess_LibriTTS["path"]["preprocessed_path"]
 
-        self.model_LibriTTS = yaml.load(open(root_dir + "/config/LibriTTS/model.yaml", "r"), Loader=yaml.FullLoader)
-        self.model_LibriTTS["path"]["hifigan_path"] = "FastSpeech2/" + self.model_LibriTTS["path"]["hifigan_path"]
+        self.model_LibriTTS = yaml.load(open(root_dir + "config/LibriTTS/model.yaml", "r"), Loader=yaml.FullLoader)
+        self.model_LibriTTS["path"]["hifigan_path"] = root_dir + self.model_LibriTTS["path"]["hifigan_path"]
 
-        self.train_LibriTTS = yaml.load(open(root_dir + "/config/LibriTTS/train.yaml", "r"), Loader=yaml.FullLoader)
-        self.train_LibriTTS["path"]["ckpt_path"] = "FastSpeech2/" + self.train_LibriTTS["path"]["ckpt_path"]
-        self.train_LibriTTS["path"]["log_path"] = "FastSpeech2/" + self.train_LibriTTS["path"]["log_path"]
-        self.train_LibriTTS["path"]["result_path"] = "NineEightFive/static/wav"
+        self.train_LibriTTS = yaml.load(open(root_dir + "config/LibriTTS/train.yaml", "r"), Loader=yaml.FullLoader)
+        self.train_LibriTTS["path"]["ckpt_path"] = root_dir + self.train_LibriTTS["path"]["ckpt_path"]
+        self.train_LibriTTS["path"]["log_path"] = root_dir + self.train_LibriTTS["path"]["log_path"]
+        self.train_LibriTTS["path"]["result_path"] = root_dir + "../NineEightFive/static/wav"
 
     def Chinese(self, text, speaker_id):
         restore_step = 600000
