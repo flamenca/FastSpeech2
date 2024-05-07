@@ -161,9 +161,11 @@ def synth_one_sample(targets, predictions, vocoder, model_config, preprocess_con
     return fig, wav_reconstruction, wav_prediction, basename
 
 
-def synth_samples(targets, predictions, vocoder, model_config, preprocess_config, path):
+def synth_samples(targets, predictions, vocoder, model_config, preprocess_config, path, fname):
 
     basenames = targets[0]
+
+    """
     for i in range(len(predictions[0])):
         basename = basenames[i]
         src_len = predictions[8][i].item()
@@ -196,7 +198,7 @@ def synth_samples(targets, predictions, vocoder, model_config, preprocess_config
         )
         plt.savefig(os.path.join(path, "{}.png".format(hashlib.md5(basename.encode()).hexdigest())))
         plt.close()
-
+    """
     from .model import vocoder_infer
 
     mel_predictions = predictions[1].transpose(1, 2)
@@ -207,7 +209,7 @@ def synth_samples(targets, predictions, vocoder, model_config, preprocess_config
 
     sampling_rate = preprocess_config["preprocessing"]["audio"]["sampling_rate"]
     for wav, basename in zip(wav_predictions, basenames):
-        wavfile.write(os.path.join(path, "{}.wav".format(hashlib.md5(basename.encode()).hexdigest())), sampling_rate, wav)
+        wavfile.write(os.path.join(path, fname), sampling_rate, wav)
 
 
 def plot_mel(data, stats, titles):

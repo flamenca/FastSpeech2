@@ -84,7 +84,7 @@ def preprocess_mandarin(text, preprocess_config):
     return np.array(sequence)
 
 
-def synthesize(model, step, configs, vocoder, batchs, control_values):
+def synthesize(model, step, configs, vocoder, batchs, control_values, fname):
     preprocess_config, model_config, train_config = configs
     pitch_control, energy_control, duration_control = control_values
 
@@ -105,6 +105,7 @@ def synthesize(model, step, configs, vocoder, batchs, control_values):
                 model_config,
                 preprocess_config,
                 train_config["path"]["result_path"],
+                fname
             )
 
 class Speaker:
@@ -120,7 +121,7 @@ class Speaker:
         self.train_AISHELL3 = yaml.load(open(root_dir + "config/AISHELL3/train.yaml", "r"), Loader=yaml.FullLoader)
         self.train_AISHELL3["path"]["ckpt_path"] = root_dir + self.train_AISHELL3["path"]["ckpt_path"]
         self.train_AISHELL3["path"]["log_path"] = root_dir + self.train_AISHELL3["path"]["log_path"]
-        self.train_AISHELL3["path"]["result_path"] = root_dir + "../NineEightFive/static/wav"
+        self.train_AISHELL3["path"]["result_path"] = root_dir + "../NineEightFive/static/cache"
 
         self.preprocess_LibriTTS = yaml.load(open(root_dir + "config/LibriTTS/preprocess.yaml", "r"), Loader=yaml.FullLoader)
         self.preprocess_LibriTTS["path"]["lexicon_path"] = root_dir + self.preprocess_LibriTTS["path"]["lexicon_path"]
@@ -133,9 +134,9 @@ class Speaker:
         self.train_LibriTTS = yaml.load(open(root_dir + "config/LibriTTS/train.yaml", "r"), Loader=yaml.FullLoader)
         self.train_LibriTTS["path"]["ckpt_path"] = root_dir + self.train_LibriTTS["path"]["ckpt_path"]
         self.train_LibriTTS["path"]["log_path"] = root_dir + self.train_LibriTTS["path"]["log_path"]
-        self.train_LibriTTS["path"]["result_path"] = root_dir + "../NineEightFive/static/wav"
+        self.train_LibriTTS["path"]["result_path"] = root_dir + "../NineEightFive/static/cache"
 
-    def Chinese(self, text, speaker_id):
+    def Chinese(self, text, speaker_id, fname):
         restore_step = 600000
         control_values = 1.0, 1.0, 1.0
 
@@ -152,9 +153,9 @@ class Speaker:
         texts = np.array([preprocess_mandarin(text, self.preprocess_AISHELL3)])
         text_lens = np.array([len(texts[0])])
         batchs = [(ids, raw_texts, speakers, texts, text_lens, max(text_lens))]
-        synthesize(model, restore_step, configs, vocoder, batchs, control_values)
+        synthesize(model, restore_step, configs, vocoder, batchs, control_values, fname)
 
-    def English(self, text, speaker_id):
+    def English(self, text, speaker_id, fname):
         restore_step = 800000
         control_values = 1.0, 1.0, 1.0
 
@@ -171,7 +172,7 @@ class Speaker:
         texts = np.array([preprocess_english(text, self.preprocess_LibriTTS)])
         text_lens = np.array([len(texts[0])])
         batchs = [(ids, raw_texts, speakers, texts, text_lens, max(text_lens))]
-        synthesize(model, restore_step, configs, vocoder, batchs, control_values)
+        synthesize(model, restore_step, configs, vocoder, batchs, control_values, fname)
 
 if __name__ == "__main__":
 
@@ -276,4 +277,4 @@ if __name__ == "__main__":
 
     control_values = args.pitch_control, args.energy_control, args.duration_control
 
-    synthesize(model, args.restore_step, configs, vocoder, batchs, control_values)
+    synthesize(model, args.restore_step, configs, vocoder, batchs, control_values, "output.wav")
