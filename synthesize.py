@@ -136,13 +136,16 @@ class Speaker:
         self.train_LibriTTS["path"]["log_path"] = root_dir + self.train_LibriTTS["path"]["log_path"]
         self.train_LibriTTS["path"]["result_path"] = root_dir + "../NineEightFive/static/cache"
 
+    Chinese_model= None 
+    English_model= None 
     def Chinese(self, text, speaker_id, fname):
         restore_step = 600000
         control_values = 1.0, 1.0, 1.0
 
         configs = (self.preprocess_AISHELL3, self.model_AISHELL3, self.train_AISHELL3)
         # Get model
-        model = get_model(restore_step, configs, device, train=False)
+        if Chinese_model == None:
+            Chinese_model = get_model(restore_step, configs, device, train=False)
 
         # Load vocoder
         vocoder = get_vocoder(self.model_AISHELL3, device)
@@ -153,7 +156,7 @@ class Speaker:
         texts = np.array([preprocess_mandarin(text, self.preprocess_AISHELL3)])
         text_lens = np.array([len(texts[0])])
         batchs = [(ids, raw_texts, speakers, texts, text_lens, max(text_lens))]
-        synthesize(model, restore_step, configs, vocoder, batchs, control_values, fname)
+        synthesize(Chinese_model, restore_step, configs, vocoder, batchs, control_values, fname)
 
     def English(self, text, speaker_id, fname):
         restore_step = 800000
@@ -161,7 +164,8 @@ class Speaker:
 
         configs = (self.preprocess_LibriTTS, self.model_LibriTTS, self.train_LibriTTS)
         # Get model
-        model = get_model(restore_step, configs, device, train=False)
+        if English_model == None:
+            English_model = get_model(restore_step, configs, device, train=False)
 
         # Load vocoder
         vocoder = get_vocoder(self.model_LibriTTS, device)
@@ -172,7 +176,7 @@ class Speaker:
         texts = np.array([preprocess_english(text, self.preprocess_LibriTTS)])
         text_lens = np.array([len(texts[0])])
         batchs = [(ids, raw_texts, speakers, texts, text_lens, max(text_lens))]
-        synthesize(model, restore_step, configs, vocoder, batchs, control_values, fname)
+        synthesize(English_model, restore_step, configs, vocoder, batchs, control_values, fname)
 
 if __name__ == "__main__":
 
